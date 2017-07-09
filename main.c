@@ -45,6 +45,9 @@
 #define LOOSE 5000		// Store up-to n watch_files
 #define SIZE_LIMIT 256 * 1024	// Only store 256+KB files, this must be larger than CRC_BUF
 
+// Must supply the command to argv[0] as well
+#define HELPER "am", "am", "startservice", "com.arter97.snapshotmanager/.TemperedListener"
+
 #define EVENT_SIZE	sizeof(struct inotify_event)
 #define EVENT_BUF_LEN	(1024 * (EVENT_SIZE + 16))
 #define INOTIFY_FLAG	(IN_CREATE | IN_DELETE | IN_CLOSE_WRITE)
@@ -111,9 +114,10 @@ static int temper_watched_files = 0;	// Local watched_files separated from incre
 
 static void temper_alert(void)
 {
-	// TODO : Alert to Android app
 	printf("Storage tempered!!\n");
-	exit(1);
+	if (-1 == execlp(HELPER, NULL)) {
+		perror("Failed to call helper program");
+	}
 }
 
 pthread_mutex_t temper_update_mutex = PTHREAD_MUTEX_INITIALIZER;
