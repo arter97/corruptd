@@ -41,8 +41,8 @@
 
 // TODO : Add minimum threshold for reliable detection
 // #define DEBUG
-#define ALLOC_UNIT 100		// Call realloc() on every n items
-#define LOOSE 1000		// Store up-to n watch_files
+#define ALLOC_UNIT 500		// Call realloc() on every n items
+#define LOOSE 5000		// Store up-to n watch_files
 #define SIZE_LIMIT 256 * 1024	// Only store 256+KB files, this must be larger than CRC_BUF
 
 #define EVENT_SIZE	sizeof(struct inotify_event)
@@ -85,6 +85,7 @@
  * 2097152 :    12.708s            1
  */
 
+// Theoretically 24 bytes per struct
 struct watch_file {
 	char *path;
 	unsigned long long offset;
